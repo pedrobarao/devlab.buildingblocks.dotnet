@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up .NET
         uses: actions/setup-dotnet@v1
@@ -27,8 +29,11 @@ jobs:
       - name: Pack the project
         run: dotnet pack --configuration Release --no-build --output ./nupkg
 
-    #   - name: Publish to GitHub Packages
-    #     run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/pedrobarao/index.json" --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --skip-duplicate
+      - name: Upload NuGet packages as artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: nuget-packages
+          path: ./nupkg/*.nupkg
 
   release:
     needs: build
@@ -40,14 +45,11 @@ jobs:
         with:
           token: ${{ secrets.GH_PACKAGES_TOKEN }}
     
-      - name: Fetch all history for all tags and branches
-        run: git fetch --prune --unshallow
-  
-      - name: Update local branch with remote branch
-        run: git pull origin main
-
-    #   - name: Pack the project
-    #     run: dotnet pack --configuration Release --no-build --output ./nupkg
+      - name: Download NuGet packages
+        uses: actions/download-artifact@v2
+        with:
+          name: nuget-packages
+          path: ./nupkg
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -59,14 +61,13 @@ jobs:
           echo '{}' > package.json
           npm install @semantic-release/exec @semantic-release/git @semantic-release/github @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator conventional-changelog-conventionalcommits
 
-      - name: Fix commit dates
-        run: |
-          git filter-branch --env-filter '
-          if [ "$GIT_COMMITTER_DATE" = "Thu, 01 Jan 1970 00:00:00 +0000" ]; then
-            export GIT_COMMITTER_DATE="$(date)"
-            export GIT_AUTHOR_DATE="$(date)"
-          fi
-          ' --tag-name-filter cat -- --all
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+          source-url: https://nuget.pkg.github.com/pedrobarao/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run semantic-release
         env:
