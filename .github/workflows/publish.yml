@@ -1,5 +1,5 @@
 name: Publish to GitHub Packages
- 
+
 on:
   push:
     branches:
@@ -7,33 +7,33 @@ on:
 
 jobs:
   build:
-     runs-on: ubuntu-latest
- 
-     steps:
-       - name: Check out the repository
-         uses: actions/checkout@v2
- 
-       - name: Set up .NET
-         uses: actions/setup-dotnet@v1
-         with:
-           dotnet-version: '8.0.x'
- 
-       - name: Restore dependencies
-         run: dotnet restore
- 
-       - name: Build the project
-         run: dotnet build --configuration Release --no-restore
- 
-       - name: Pack the project
-         run: dotnet pack --configuration Release --no-build --output ./nupkg
- 
-       - name: Publish to GitHub Packages
-         run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/pedrobarao/index.json" --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --skip-duplicate
- 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build the project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack the project
+        run: dotnet pack --configuration Release --no-build --output ./nupkg
+
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/pedrobarao/index.json" --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --skip-duplicate
+
   release:
     needs: build
     runs-on: ubuntu-latest
- 
+
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
@@ -41,31 +41,22 @@ jobs:
           token: ${{ secrets.GH_PACKAGES_TOKEN }}
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
-   
+
       - name: Update local branch with remote branch
         run: git pull origin main
- 
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '18'
- 
+
       - name: Create temporary package.json
         run: |
-           echo '{}' > package.json
-           npm install @semantic-release/exec @semantic-release/git @semantic-release/github @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator conventional-changelog-conventionalcommits
- 
-      - name: Fix commit dates
-        run: |
-           git filter-branch --env-filter '
-           if [ "$GIT_COMMITTER_DATE" = "Thu, 01 Jan 1970 00:00:00 +0000" ]; then
-             export GIT_COMMITTER_DATE="$(date)"
-             export GIT_AUTHOR_DATE="$(date)"
-           fi
-           ' --tag-name-filter cat -- --all
- 
+          echo '{}' > package.json
+          npm install @semantic-release/exec @semantic-release/git @semantic-release/github @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator conventional-changelog-conventionalcommits
+
       - name: Run semantic-release
+        run: npx semantic-release
         env:
           GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
-        run: npx semantic-release
