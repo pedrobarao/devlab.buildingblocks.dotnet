@@ -43,8 +43,10 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Create temporary package.json
+        run: |
+          echo '{}' > package.json
+          npm install @semantic-release/exec @semantic-release/git @semantic-release/github @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator
 
       - name: Run semantic-release
         env:
