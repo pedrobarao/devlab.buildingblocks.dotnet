@@ -45,6 +45,7 @@ jobs:
         uses: actions/download-artifact@v4.1.9
         with:
           token: ${{ secrets.GH_PACKAGES_TOKEN }}
+
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
 
