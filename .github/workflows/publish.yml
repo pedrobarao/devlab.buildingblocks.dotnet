@@ -24,8 +24,8 @@ jobs:
       - name: Build the project
         run: dotnet build --configuration Release --no-restore
 
-    #   - name: Pack the project
-    #     run: dotnet pack --configuration Release --no-build --output ./nupkg
+      - name: Pack the project
+        run: dotnet pack --configuration Release --no-build --output ./nupkg
 
     #   - name: Publish to GitHub Packages
     #     run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/pedrobarao/index.json" --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --skip-duplicate
@@ -46,8 +46,8 @@ jobs:
       - name: Update local branch with remote branch
         run: git pull origin main
 
-      - name: Pack the project
-        run: dotnet pack --configuration Release --no-build --output ./nupkg
+    #   - name: Pack the project
+    #     run: dotnet pack --configuration Release --no-build --output ./nupkg
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
