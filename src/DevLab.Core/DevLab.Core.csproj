@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <Version>1.0.0</Version>
+        <Version>1.0.1</Version>
         <PackageId>DevLab.Core</PackageId>
         <Authors>Pedro Barão</Authors>
         <RepositoryUrl>https://github.com/pedrobarao/devlab.buildingblocks.dotnet</RepositoryUrl>
@@ -16,7 +16,6 @@
         <RepositoryBranch>main</RepositoryBranch>
         <RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
         <PackageOutputPath>$(OutputPath)</PackageOutputPath>
-        <!-- Adicionando um comentário para testar a atualização do pacote -->
     </PropertyGroup>
 
 </Project>
