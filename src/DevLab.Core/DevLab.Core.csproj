@@ -16,6 +16,7 @@
         <RepositoryBranch>main</RepositoryBranch>
         <RepositoryCommit>$(SourceRevisionId)</RepositoryCommit>
         <PackageOutputPath>$(OutputPath)</PackageOutputPath>
+        <!-- Adicionando um comentário para testar a atualização do pacote -->
     </PropertyGroup>
 
 </Project>
