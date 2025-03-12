@@ -55,6 +55,15 @@ jobs:
           echo '{}' > package.json
           npm install @semantic-release/exec @semantic-release/git @semantic-release/github @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator conventional-changelog-conventionalcommits
 
+      - name: Fix commit dates
+        run: |
+          git filter-branch --env-filter '
+          if [ "$GIT_COMMITTER_DATE" = "Thu, 01 Jan 1970 00:00:00 +0000" ]; then
+            export GIT_COMMITTER_DATE="$(date)"
+            export GIT_AUTHOR_DATE="$(date)"
+          fi
+          ' --tag-name-filter cat -- --all
+
       - name: Run semantic-release
         run: npx semantic-release
         env:
