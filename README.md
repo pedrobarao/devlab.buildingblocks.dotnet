@@ -33,3 +33,4 @@ Este projeto usa Conventional Commits para versionamento automático. Certifique
 ## Changelog
 
 O changelog é gerado automaticamente usando o `semantic-release`. Você pode ver todas as mudanças no arquivo `CHANGELOG.md`.
+Teste
