@@ -50,7 +50,7 @@ jobs:
         run: git fetch --prune --unshallow
 
       - name: Update local branch with remote branch
-        run: git pull origin main
+        run: git pull origin main --rebase
 
       - name: Download package
         uses: actions/download-artifact@v4.1.9
@@ -78,7 +78,7 @@ jobs:
           ' --tag-name-filter cat -- --all
 
       - name: Ensure local branch is up-to-date
-        run: git pull origin main
+        run: git pull origin main --rebase
 
       - name: Run semantic-release
         run: npx semantic-release
