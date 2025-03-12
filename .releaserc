@@ -15,7 +15,7 @@
     [
       "@semantic-release/exec",
       {
-        "publishCmd": "dotnet nuget push ./nupkg/*.nupkg --source \"https://nuget.pkg.github.com/pedrobarao/index.json\" --api-key ${GH_PACKAGES_TOKEN}"
+        "publishCmd": "dotnet nuget push ./nupkg/*.nupkg --source \"https://nuget.pkg.github.com/pedrobarao/index.json\" --api-key ${GH_PACKAGES_TOKEN} --skip-duplicate"
       }
     ]
   ],

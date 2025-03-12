@@ -28,7 +28,7 @@ jobs:
         run: dotnet pack --configuration Release --no-build --output ./nupkg
 
       - name: Publish to GitHub Packages
-        run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/pedrobarao/index.json" --api-key ${{ secrets.GH_PACKAGES_TOKEN }}
+        run: dotnet nuget push ./nupkg/*.nupkg --source "https://nuget.pkg.github.com/pedrobarao/index.json" --api-key ${{ secrets.GH_PACKAGES_TOKEN }} --skip-duplicate
 
   release:
     needs: build
