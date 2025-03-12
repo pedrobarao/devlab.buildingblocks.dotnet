@@ -44,7 +44,8 @@ jobs:
       - name: Check out the repository
         uses: actions/download-artifact@v4.1.9
         with:
-          token: ${{ secrets.GH_PACKAGES_TOKEN }}
+          name: nuget-package
+          path: ./nupkg/*.nupkg
 
       - name: Fetch all history for all tags and branches
         run: git fetch --prune --unshallow
