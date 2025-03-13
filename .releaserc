@@ -6,16 +6,16 @@
     "@semantic-release/changelog",
     "@semantic-release/github",
     [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "dotnet nuget push ./nupkg/*.nupkg --source \"https://nuget.pkg.github.com/pedrobarao/index.json\" --api-key ${GH_PACKAGES_TOKEN} --skip-duplicate"
+      }
+    ],
+    [
       "@semantic-release/git",
       {
         "assets": ["CHANGELOG.md", "src/DevLab.Core/DevLab.Core.csproj"],
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
-      }
-    ],
-    [
-      "@semantic-release/exec",
-      {
-        "publishCmd": "dotnet nuget push ./nupkg/*.nupkg --source \"https://nuget.pkg.github.com/pedrobarao/index.json\" --api-key ${GH_PACKAGES_TOKEN} --skip-duplicate"
       }
     ]
   ],
